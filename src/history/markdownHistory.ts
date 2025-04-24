@@ -1,7 +1,6 @@
 import { TFile, Notice } from 'obsidian';
 import ObsidianGemini from '../../main';
 import { BasicGeminiConversationEntry, GeminiConversationEntry } from '../types/conversation';
-import { createHash } from 'crypto';
 import * as Handlebars from 'handlebars';
 // @ts-ignore
 import historyEntryTemplate from './templates/historyEntry.hbs';
@@ -24,16 +23,8 @@ export class MarkdownHistory {
         // Remove .md extension if present before creating safe filename
         const pathWithoutExt = notePath.replace(/\.md$/, '');
         // Convert the note path to a safe filename by replacing path separators
-        const safeFilename = pathWithoutExt.replace(/[\/\\]/g, '_');
-        
-        // Generate a consistent hash from the notePath
-        const encoder = new TextEncoder();
-        const data = encoder.encode(notePath);
-        const hashArray = Array.from(new Uint8Array(createHash('sha256').update(data).digest()))
-            .map(b => b.toString(16).padStart(2, '0'));
-        const prefix = hashArray.join('').slice(0, 8);
-        
-        return `${historyFolder}/${prefix}-${safeFilename}.md`;
+        const safeFilename = pathWithoutExt.replace(/[\/\\]/g, '__');
+        return `${historyFolder}/${safeFilename}.md`;
     }
 
     async appendHistoryForFile(file: TFile, newEntry: BasicGeminiConversationEntry) {
