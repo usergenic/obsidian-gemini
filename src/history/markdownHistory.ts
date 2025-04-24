@@ -24,7 +24,8 @@ export class MarkdownHistory {
         const pathWithoutExt = notePath.replace(/\.md$/, '');
         // Convert the note path to a safe filename by replacing path separators
         const safeFilename = pathWithoutExt.replace(/[\/\\]/g, '__');
-        return `${historyFolder}/${safeFilename}.md`;
+        const prefix = 'Gemini Chat History'
+        return `${historyFolder}/${prefix}-${safeFilename}.md`;
     }
 
     async appendHistoryForFile(file: TFile, newEntry: BasicGeminiConversationEntry) {
